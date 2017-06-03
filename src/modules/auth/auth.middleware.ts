@@ -1,10 +1,10 @@
 import { HttpException } from '@nestjs/core';
 import { Middleware, NestMiddleware } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UserService } from './../user/user.service';
 
 @Middleware()
 export class AuthMiddleware implements NestMiddleware {
-    constructor(private usersService: UsersService) {}
+    constructor(private usersService: UserService) {}
 
     resolve(): (req, res, next) => void {
         return async (req, res, next) => {

@@ -23,6 +23,7 @@
     "@nestjs/microservices": "^2.1.0",
     "@nestjs/testing": "^2.0.3",
     "@nestjs/websockets": "^2.1.0",
+    "body-parser": "^1.17.2",
     "dotenv": "^4.0.0",
     "jsonwebtoken": "^7.4.1",
     "mysql": "^2.13.0",

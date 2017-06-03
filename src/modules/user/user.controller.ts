@@ -17,6 +17,7 @@ export class UsersController {
 
     @Get('/:id')
     async getUser(@Response() res, @Param('id') id ) {
+        console.log(id);
         let user = await this.userService.getUser(id)
         res.status(HttpStatus.OK).json(user);
     }
