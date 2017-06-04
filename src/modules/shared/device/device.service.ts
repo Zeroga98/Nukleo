@@ -1,17 +1,17 @@
 import { Component } from '@nestjs/common'
 import { HttpException } from '@nestjs/core'
-import { db } from '../../config/db.connection'
+import { db } from '../../../config/db.connection'
 
 @Component()
-export class UserService {
+export class DeviceService {
 
 /*******************************************************
- * Get all Users
+ * Get all Devices
  *******************************************************/
-    getAllUsers() {
+    getAllDevices () {
       return new Promise ((resolve, reject) => {
         db().query(
-          'SELECT * FROM user', (err, result)=> {
+          'SELECT * FROM device', (err, result)=> {
             return !err
             ? resolve (result)
             : reject (new HttpException (err, 500))
@@ -21,12 +21,12 @@ export class UserService {
     }
 
 /*******************************************************
- * Get One User by Id
+ * Get One Device by Id
  *******************************************************/
-    getUser(id: number) {
+    getDevice (id: number) {
       return new Promise ((resolve, reject)=> {
         db().query(
-          'SELECT * FROM user WHERE id_user = ?', [id], (err, result)=> {
+          'SELECT * FROM device WHERE device_id = ?', [id], (err, result)=> {
             return !err
             ? resolve (result)
             : reject (new HttpException (err, 500))
@@ -36,21 +36,21 @@ export class UserService {
     }
 
 /*******************************************************
- * Update User
+ * Update Device
  *******************************************************/
 
 
 
 
 /*******************************************************
- * Delete User by id
+ * Delete Device by id
  *******************************************************/
-    deleteUser (id: number) {
+    deleteDevice (id: number) {
       return new Promise ((resolve, reject)=> {
         db().query(
-          'DELETE  FROM user WHERE id_user = ?', [id], (err, result)=> {
+          'DELETE  FROM device WHERE device_id = ?', [id], (err, result)=> {
             return !err
-            ? resolve ('Usuario Eliminado')
+            ? resolve ('Dispositivo Eliminado')
             : reject (new HttpException (err, 500))
           }
         )
