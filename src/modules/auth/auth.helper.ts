@@ -7,7 +7,6 @@ export class AuthHelper {
  * Return a Jwt Token
  *******************************************************/
     public setToken(user) {
-      console.log(user[0].user_email)
       return {
         token: jwt.sign ({
           id: user[0].id_user,

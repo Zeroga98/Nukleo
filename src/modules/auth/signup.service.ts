@@ -4,7 +4,6 @@ import { AuthHelper } from './auth.helper';
 import { db } from '../../config/db.connection'
 import * as bcrypt  from 'bcryptjs'
 
-console.log(db);
 @Component()
 export class SignUpService {
 
