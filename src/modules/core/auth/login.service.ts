@@ -1,7 +1,7 @@
 import { Component } from '@nestjs/common'
 import { HttpException } from '@nestjs/core'
 import { AuthHelper } from './auth.helper'
-import { db } from '../../config/db.connection'
+import { db } from '../../../config/db.connection'
 import * as bcrypt  from 'bcryptjs'
 
 @Component()

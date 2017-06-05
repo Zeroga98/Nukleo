@@ -2,7 +2,7 @@ import { Controller, Post, Delete, Request, Response, Body, HttpStatus } from '@
 import { LoginService } from './login.service';
 import { SignUpService } from "./signup.service";
 
-@Controller('auth')
+@Controller()
 
 export class AuthController {
 
@@ -27,8 +27,8 @@ export class AuthController {
     @Body('password') password,
     @Body('username') username
   ) {
-    const auth = await this.signupService.signUpCustomer(email, password, username)
-    res.status(HttpStatus.OK).json(auth)
+    const response = await this.signupService.signUpCustomer(email, password, username)
+    res.status(HttpStatus.OK).json(response)
   }
 
   @Post('/request')

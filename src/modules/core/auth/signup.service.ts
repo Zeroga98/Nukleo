@@ -1,7 +1,7 @@
 import { Component } from '@nestjs/common';
 import { HttpException } from '@nestjs/core';
 import { AuthHelper } from './auth.helper';
-import { db } from '../../config/db.connection'
+import { db } from '../../../config/db.connection'
 import * as bcrypt  from 'bcryptjs'
 
 @Component()
@@ -18,9 +18,9 @@ export class SignUpService {
       
         return new Promise ((resolve, reject) => {
         db().query(
-          'CALL customer_signup(?, ?, ?)', [email, bcrypt.hashSync (password, 10), username], (err, result)=> {
+          'CALL customer_signup(?, ?, ?)', [email, bcrypt.hashSync (password, 10), username], (err)=> {
             return !err
-            ? resolve (result)
+            ? resolve ({'message':'registro exitoso'} )
             : reject (new HttpException (err.message, 500))
           }
         )
@@ -36,7 +36,7 @@ export class SignUpService {
         db().query(
           'CALL maker_signup(?, ?, ?)', [email, bcrypt.hashSync (password, 10), name, adress, phone, logo], (err, result)=> {
             return !err
-            ? resolve (result)
+            ? resolve ({'message':'registro exitoso'} )
             : reject (new HttpException (err.message, 500))
           }
         )

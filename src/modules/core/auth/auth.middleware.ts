@@ -1,5 +1,6 @@
 import { Middleware, NestMiddleware } from '@nestjs/common'
-import { Config } from '../../config'
+import { Config } from '../../../config'
+import { db } from '../../../config/db.connection'
 import * as jwt from 'jsonwebtoken'
 
 @Middleware()
@@ -9,10 +10,10 @@ export class AuthMiddleware implements NestMiddleware {
     return(req, res, next) => {
       if(req.headers.authorization && req.headers.authorization.split (' ')[0] === 'Bearer') {
         let token = req.headers.authorization.split (' ')[1]
-        jwt.verify(token, Config.secret, function(err, payload) {
+        jwt.verify(token, Config.SECRET, function(err, payload) {
           if(!err) {
-            //confirm identity and check user permissions
-            req.payload = payload; 
+            req.apikey = payload.id; 
+            //console.log(payload);
             next();
           } 
           else {
