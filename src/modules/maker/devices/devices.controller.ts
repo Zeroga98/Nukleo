@@ -15,18 +15,18 @@ export class DevicesController {
     res.status(HttpStatus.OK).json("OK")
   }
 
-  @Get('/get-all')
+  @Get('/maker/devices/get-all')
   public async getAll(
     @Response() res,
     @Body('apikey') apikey
     ) {
-    //const response = await this.devicesService.pairDevice(device, apikey, latitude, longitude)
-    res.status(HttpStatus.OK).json("Bien")
+    let response = await this.devicesService.getAll(apikey)
+    res.status(HttpStatus.OK).json(response)
   }
 
   @Post('/signup')
   public async signup( @Request() req, @Response() res) {
-    const devices = await this.devicesService.getMyDevices(req.apikey)
-    res.status(HttpStatus.OK).json(devices)
+    //const devices = await this.devicesService.getMyDevices(req.apikey)
+    res.status(HttpStatus.OK).json("OK2")
   }
 }
