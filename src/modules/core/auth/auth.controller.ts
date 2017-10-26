@@ -42,7 +42,7 @@ export class AuthController {
     @Body('logo') logo,
     @Body('description') description
   ) {
-    const auth = await this.signupService.signUpMaker (email, password, name, adress, phone, logo)
+    const auth = await this.signupService.signUpMaker (email, password, name, adress, phone, description, logo)
     res.status (HttpStatus.OK).json(auth)
   }
 

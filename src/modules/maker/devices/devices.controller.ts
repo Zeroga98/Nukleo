@@ -26,7 +26,7 @@ export class DevicesController {
 
   @Post('/signup')
   public async signup( @Request() req, @Response() res) {
-    const devices = await this.devicesService.getMyDevices(req.apikey)
-    res.status(HttpStatus.OK).json(devices)
+    //const devices = await this.devicesService.getMyDevices(req.apikey)
+    res.status(HttpStatus.OK).json('ok')
   }
 }
