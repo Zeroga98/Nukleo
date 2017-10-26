@@ -37,7 +37,7 @@ export class AuthController {
     @Body('email') email,
     @Body('password') password,
     @Body('name') name,
-    @Body('adress') adress,
+    @Body('address') adress,
     @Body('phone') phone,
     @Body('logo') logo,
     @Body('description') description

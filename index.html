@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Domoty Frontend - ESP8266/MQTT/WS</title>
+</head>
+<body>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
+  <script type="text/javascript" src="https://rawgit.com/eclipse/paho.mqtt.javascript/master/src/paho-mqtt.js"></script>
+  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
+  <script type="text/javascript">
+  	var MQTTWS_BROKER = "172.27.15.67"; // IP del Broker MQTT
+	  var WS_PORT = 9000; // Puerto del WebSocket
+	  var MQTT = new Paho.MQTT.Client(MQTTWS_BROKER, WS_PORT,"Domoty-"+ new Date().getTime()); // Create MQTT client
+	  
+	  MQTT.onConnectionLost = function (responseObject) {
+	    console.log("Status: " + responseObject.errorMessage);
+	  };
+
+	  MQTT.onMessageArrived = function (message) {
+	    console.log(message.destinationName, ' -- ', message.payloadString);
+	  };
+
+	  function init() {
+	    MQTT.connect({ // MQTT Connect
+	        timeout: 3,
+	        onSuccess: function () {
+	          console.log("Connected to Broker MQTT");
+	          MQTT.subscribe('domoty/esp8266', {qos: 1}); // Subscribe to "domoty/esp8266" Topic
+	        },
+	        onFailure: function (message) {
+	          console.log("Fail connection: " + message.errorMessage);
+	        }
+	    })
+	  }
+
+	  $(document).ready(function(){
+
+	    $('#btn-on').click(function(){ // Event: Switch ON
+	      message = new Paho.MQTT.Message("1"); // Create Message
+	      message.destinationName = "domoty/esp8266"; // Destine message to the "domoty/esp8266" Topic
+	      MQTT.send(message); // Send Message
+	    });
+
+	    $('#btn-off').click(function(){ // Event: Switch OFF
+	      message = new Paho.MQTT.Message("0"); //Create Message
+	      message.destinationName = "domoty/esp8266"; // Destine message to the "domoty/esp8266" Topic
+	      MQTT.send(message); // Send Message
+	    });
+
+	  });
+
+	  init();
+  </script>
+</body>
+<div class="container">
+  <div class="row">
+    <div class="col s12">
+      <h2 class="center">Domoty Frontend Esp8266/MQTT/WS</h2>
+      <div class="row center">
+        <a class="waves-effect waves-light btn green" id="btn-on">ON</a>
+        <a class="waves-effect waves-light btn red" id="btn-off">OFF</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

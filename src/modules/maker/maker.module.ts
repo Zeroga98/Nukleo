@@ -1,7 +1,23 @@
-import { Module } from '@nestjs/common'
+import { Module, MiddlewaresConsumer } from '@nestjs/common';
+import { AuthMiddleware } from '../core/auth/auth.middleware';
+
+/*********************************************************************
+ * Controllers
+ *********************************************************************/
+ import { DevicesController } from './devices/devices.controller';
+
+
+/*********************************************************************
+ * Components (Services, helpers, etc)
+ *********************************************************************/
+import { DevicesService } from './devices/devices.service';
 
 @Module({
-  modules: [ ]
+  controllers: [ DevicesController ],
+  components: [ DevicesService ]
 })
-export class MakerModule
- { }
+export class MakerModule {
+  configure (consumer: MiddlewaresConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes(DevicesController)
+  }
+}

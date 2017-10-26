@@ -30,11 +30,10 @@ export class SignUpService {
 /*********************************************************************
  * Register User 'maker'
  *********************************************************************/
-    public signUpMaker (email: String, password: String, name: String, adress: String, phone: String, logo: String) {
-      
+    public signUpMaker (email: String, password: String, name: String, adress: String, phone: String, logo: String, description:  String) {
         return new Promise ((resolve, reject) => {
         db().query(
-          'CALL maker_signup(?, ?, ?)', [email, bcrypt.hashSync (password, 10), name, adress, phone, logo], (err, result)=> {
+          'CALL maker_signup(?, ?, ?, ?, ?, ?, ?)', [email, bcrypt.hashSync (password, 10), name, adress, phone, description, logo], (err, result)=> {
             return !err
             ? resolve ({'message':'registro exitoso'} )
             : reject (new HttpException (err.message, 500))
