@@ -1,11 +1,13 @@
-import { Component } from '@nestjs/common'
+import { Component, Inject } from '@nestjs/common'
 import { HttpException } from '@nestjs/core'
-import { db } from '../../../config/db.connection'
 import * as async from 'async'
 
 @Component()
 export class DevicesService {
 
+constructor(
+  @Inject('DbConnectionToken') private connection,
+) {}
 
   /*********************************************************************
    * Pair a device
@@ -13,7 +15,7 @@ export class DevicesService {
   public pairDevice(device: String, apikey: String, latitude: String, longitude: String) {
 
     return new Promise((resolve, reject) => {
-      db().query(
+      this.connection.query(
         'CALL pairing(?, ?, ?,?)', [device, apikey, latitude, longitude], (err, result) => {
           return !err
             ? resolve({ 'message': 'Dispositivo emparejado' })
@@ -28,7 +30,7 @@ export class DevicesService {
    *******************************************************/
   getMyDevices(apikey) {
     return new Promise((resolve, reject) => {
-      db().query(
+      this.connection.query(
         'SELECT ' +
         'd.id_device AS id, ' +
         'd.device_name AS name, ' +
@@ -60,7 +62,7 @@ export class DevicesService {
    *******************************************************/
   getDevice(apikey: string, deviceId: number) {
     return new Promise((resolve, reject) => {
-      db().query(
+      this.connection.query(
         'SELECT * ' +
         'FROM ' +
         'device_detaild ' +
@@ -83,7 +85,7 @@ export class DevicesService {
     })
 
     function getActions(device, callback) {
-      db().query(
+      this.connection.query(
         "select * from action " +
         "where action.fk_model= ( " +
         "SELECT " +
@@ -106,7 +108,7 @@ export class DevicesService {
    *******************************************************/
   deleteDevice(id: number) {
     return new Promise((resolve, reject) => {
-      db().query(
+      this.connection.query(
         'DELETE  FROM device WHERE device_id = ?', [id], (err, result) => {
           return !err
             ? resolve('Dispositivo Eliminado')
@@ -118,7 +120,7 @@ export class DevicesService {
 
   public async getDeviceActions(device_id: number){
     return new Promise((resolve, reject) => {
-      db().query(
+      this.connection.query(
         `SELECT *
         FROM device d
         left join event e on e.fk_deviceExec = d.id_device
