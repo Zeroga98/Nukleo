@@ -13,7 +13,6 @@ export class AuthMiddleware implements NestMiddleware {
         jwt.verify(token, Config.SECRET, function(err, payload) {
           if(!err) {
             req.apikey = payload.id; 
-            //console.log(payload);
             next();
           } 
           else {

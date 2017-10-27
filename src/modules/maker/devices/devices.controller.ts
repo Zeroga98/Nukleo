@@ -1,26 +1,26 @@
 import { Controller, Get, Delete, Request, Response, Body, Param, HttpStatus, Post } from '@nestjs/common';
 import { DevicesService } from './devices.service';
 
-@Controller('')
+@Controller('maker/devices')
 export class DevicesController {
 
   constructor(private devicesService: DevicesService) { }
 
-  @Get('/get-by-id')
-  public async getById(
-    @Response() res,
-    @Body('apikey') apikey
-    ) {
-    //const response = await this.devicesService.pairDevice(device, apikey, latitude, longitude)
-    res.status(HttpStatus.OK).json("OK")
-  }
-
-  @Get('/maker/devices/get-all')
+  @Get('/get-all')
   public async getAll(
     @Response() res,
-    @Body('apikey') apikey
+    @Request() req
     ) {
-    let response = await this.devicesService.getAll(apikey)
+    let response = await this.devicesService.getAll(req.apikey)
+    res.status(HttpStatus.OK).json(response)
+  }
+
+  @Get('/get-by-model/:model_id')
+  public async getByModelId(
+    @Response() res,
+    @Param('model_id') modelId
+    ) {
+    const response = await this.devicesService.getByModelId(modelId)
     res.status(HttpStatus.OK).json(response)
   }
 

@@ -16,7 +16,8 @@ async function bootstrap() {
 
   	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(cors());
-	await app.startAllMicroservicesAsync();
+	
   	await app.listen(Config.PORT, () => console.log(`Application is listening on port ${Config.PORT}`));
+  	await app.startAllMicroservicesAsync();
 }
 bootstrap();

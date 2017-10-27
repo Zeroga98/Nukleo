@@ -25,16 +25,16 @@ export class DevicesService {
     })
   }
 
-  /*********************************************************************
-   * Pair a device
-   *********************************************************************/
-  public pairDevice(device: String, apikey: String, latitude: String, longitude: String) {
-
+  public getByModelId(modelId: String) {
     return new Promise((resolve, reject) => {
       db().query(
-        'CALL pairing(?, ?, ?,?)', [device, apikey, latitude, longitude], (err, result) => {
+        "SELECT " +
+        "d.* " +
+        "FROM model mdl " +
+        "left join device d on d.fk_model = mdl.id_model " +
+        "where mdl.id_model = ?;", modelId, (err, result) => {
           return !err
-            ? resolve({ 'message': 'Dispositivo emparejado' })
+            ? resolve(result)
             : reject(new HttpException(err.message, 500))
         }
       )
