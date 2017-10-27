@@ -41,4 +41,19 @@ export class DevicesService {
     })
   }
 
+  public addEvent(deviceId: String, actionId: String) {
+    return new Promise((resolve, reject) => {
+      db().query(
+        "INSERT INTO event " +
+        "(fk_deviceExec, fk_actionExec) " +
+        "VALUES " +
+        "(?, ?) ", [deviceId, actionId], (err, result) => {
+          return !err
+            ? resolve({ id_event: result.insertId })
+            : reject(new HttpException(err.message, 500))
+        }
+      )
+    })
+  }
+
 }

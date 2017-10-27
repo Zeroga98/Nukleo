@@ -1,5 +1,6 @@
 import { Component, Inject } from '@nestjs/common'
 import { HttpException } from '@nestjs/core'
+import { db } from '../../../config/db.connection'
 import * as async from 'async'
 
 @Component()
@@ -9,14 +10,28 @@ constructor(
   @Inject('DbConnectionToken') private connection,
 ) {}
 
+  public getDevicesTrigger(device_id) {
+    return new Promise((resolve, reject) => {
+      db().query(
+        "select * " +
+        "from event e "+
+        `where e.fk_deviceExec = '${ device_id }' AND e.fk_deviceTrigger IS NOT NULL`, [device_id], (err, result) => {
+          return !err
+            ? resolve(result)
+            : reject(new HttpException(err.message, 500))
+        }
+      )
+    })
+  }
+
   /*********************************************************************
    * Pair a device
    *********************************************************************/
   public pairDevice(device: String, apikey: String, latitude: String, longitude: String) {
 
     return new Promise((resolve, reject) => {
-      this.connection.query(
-        'CALL pairing(?, ?, ?,?)', [device, apikey, latitude, longitude], (err, result) => {
+      db().query(
+        'insert into acl (fk_customer, fk_devices) values ((select id_customer from user u inner join customer c on c.fk_user = u.id_user where u.user_apikey = ?), ?);', [apikey, device], (err, result) => {
           return !err
             ? resolve({ 'message': 'Dispositivo emparejado' })
             : reject(new HttpException(err.message, 500))
@@ -30,7 +45,7 @@ constructor(
    *******************************************************/
   getMyDevices(apikey) {
     return new Promise((resolve, reject) => {
-      this.connection.query(
+      db().query(
         'SELECT ' +
         'd.id_device AS id, ' +
         'd.device_name AS name, ' +
@@ -62,7 +77,7 @@ constructor(
    *******************************************************/
   getDevice(apikey: string, deviceId: number) {
     return new Promise((resolve, reject) => {
-      this.connection.query(
+      db().query(
         'SELECT * ' +
         'FROM ' +
         'device_detaild ' +
@@ -70,8 +85,7 @@ constructor(
         'device_detaild.fk_customer = ( ' +
         'SELECT ' +
         'p.id_customer ' +
-        'FROM ' +
-        'user c ' +
+        'FROM user c ' +
         'INNER JOIN customer p ON p.fk_user = c.id_user ' +
         'WHERE ' +
         'c.user_apikey = ?) ' +
@@ -85,7 +99,7 @@ constructor(
     })
 
     function getActions(device, callback) {
-      this.connection.query(
+      db().query(
         "select * from action " +
         "where action.fk_model= ( " +
         "SELECT " +
@@ -108,7 +122,7 @@ constructor(
    *******************************************************/
   deleteDevice(id: number) {
     return new Promise((resolve, reject) => {
-      this.connection.query(
+      db().query(
         'DELETE  FROM device WHERE device_id = ?', [id], (err, result) => {
           return !err
             ? resolve('Dispositivo Eliminado')
@@ -120,7 +134,7 @@ constructor(
 
   public async getDeviceActions(device_id: number){
     return new Promise((resolve, reject) => {
-      this.connection.query(
+      db().query(
         `SELECT *
         FROM device d
         left join event e on e.fk_deviceExec = d.id_device

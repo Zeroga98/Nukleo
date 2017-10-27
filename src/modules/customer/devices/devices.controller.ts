@@ -9,6 +9,7 @@ export class DevicesController {
   @Post('/pair')
   public async pairDevice(
     @Response() res,
+    @Request() req,
     @Body('device') device,
     @Body('apikey') apikey,
     @Body('latitude') latitude,
@@ -16,6 +17,12 @@ export class DevicesController {
     ) {
     const response = await this.devicesService.pairDevice(device, apikey, latitude, longitude)
     res.status(HttpStatus.OK).json(response)
+  }
+
+  @Post('/customer/device/trigger')
+  public async getDeviceTrigger(@Request() req, @Response() res, @Body('device') device) {
+    const devices = await this.devicesService.getDevicesTrigger(device)
+    res.status(HttpStatus.OK).json(devices)
   }
 
   @Get('/customer/devices')

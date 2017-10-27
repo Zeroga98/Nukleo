@@ -29,4 +29,22 @@ export class DevicesController {
     //const devices = await this.devicesService.getMyDevices(req.apikey)
     res.status(HttpStatus.OK).json('ok')
   }
+
+  @Post('/event-add')
+  public async addEvent( @Request() req, @Response() res, 
+    @Body('device_id') device_id,
+    @Body('action_id') action_id
+    ) {
+    const response = await this.devicesService.addEvent(device_id, action_id)
+    res.status(HttpStatus.OK).json(response)
+  }
+
+  @Post('/event-trigger')
+  public async eventTrigger( @Request() req, @Response() res, 
+    @Body('device_id') device_id,
+    @Body('action_id') action_id
+    ) {
+    const response = await this.devicesService.addEvent(device_id, action_id)
+    res.status(HttpStatus.OK).json(response)
+  }
 }

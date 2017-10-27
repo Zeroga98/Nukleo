@@ -2,6 +2,7 @@ import * as mosca from 'mosca';
 
 import { Server, CustomTransportStrategy } from '@nestjs/microservices';
 import { Observable } from 'rxjs/Observable';
+import { db } from '../config/db.connection'
 
 export class MqttBroker extends Server implements CustomTransportStrategy {
   private broker = null;
@@ -18,12 +19,14 @@ export class MqttBroker extends Server implements CustomTransportStrategy {
 
   public close() { }
 
-  private handleMessage(message) { }
+  private handleMessage(message) { 
+  }
 
-  private sendMessage(message) { }
+  private sendMessage(message) { 
+  }
 
   private async init() {
-    console.log("hola");
+
 
     // Acepta la conexión si el usuario y contraseña son válidos
     var authenticate = function(client, username, password, callback) {

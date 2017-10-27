@@ -10,11 +10,14 @@ export class ModelsService {
     return new Promise((resolve, reject) => {
       db().query(
         "SELECT " +
-        "mdl.* " +
+        "mdl.*, " +
+        "COUNT(d.id_device) as total_devices " +
         "FROM user u " +
         "inner join maker m on u.id_user = m.fk_user " +
         "left join model mdl on mdl.fk_maker = m.id_maker " +
-        "where u.user_apikey = ?;", apikey, (err, result) => {
+        "left join device d on d.fk_model = mdl.id_model " +
+        "where u.user_apikey = ? " + 
+        "GROUP BY mdl.id_model", apikey, (err, result) => {
           return !err
             ? resolve(result)
             : reject(new HttpException(err, 500))
@@ -54,20 +57,6 @@ export class ModelsService {
         "?, ?, ?) ", [apikey, version, img, description], (err, result) => {
           return !err
             ? resolve({ id_model: result.insertId })
-            : reject(new HttpException(err.message, 500))
-        }
-      )
-    })
-  }
-
-  public addAction(fk_model: string, action_name: string, action_value: string){
-    return new Promise((resolve, reject) => {
-      db().query(
-        "INSERT INTO action (fk_model, action_name, value) " +
-        "VALUES " +
-        "(?, ?, ?) ", [fk_model, action_name, action_value], (err, result) => {
-          return !err
-            ? resolve({ id_action: result.insertId })
             : reject(new HttpException(err.message, 500))
         }
       )

@@ -30,17 +30,8 @@ export class ModelsController {
     @Body('img') img,
     @Body('description') description
     ) {
+    console.log(version);
     const response = await this.modelsService.insert(req.apikey, version, img, description)
     res.status(HttpStatus.OK).json(response)
   }
-
-  @Post('/add-actions')
-  public async addActions( @Request() req, @Response() res, 
-    @Body('model_id') fk_model,
-    @Body('action_name') action_name,
-    @Body('action_value') action_value
-    ) {
-    const response = await this.modelsService.addAction(fk_model, action_name, action_value)
-    res.status(HttpStatus.OK).json(response)
-  }  
 }
